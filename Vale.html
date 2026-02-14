@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Happy Valentine ❤️</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* ===== Màn hình đầu ===== */
+.card{
+    background:white;
+    padding:50px 70px;
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0 15px 40px rgba(0,0,0,.2);
+    transition:.6s;
+    z-index:2;
+}
+
+.card.hide{
+    opacity:0;
+    transform:scale(.8);
+}
+
+.card h1{
+    color:#ff4d6d;
+    margin-bottom:15px;
+}
+
+button{
+    padding:12px 25px;
+    border:none;
+    border-radius:25px;
+    background:#ff4d6d;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+/* ===== Trang slide ===== */
+.love-page{
+    position:fixed;
+    inset:0;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    visibility:hidden;
+    transition:.6s;
+}
+
+.love-page.show{
+    opacity:1;
+    visibility:visible;
+}
+
+/* ===== SLIDER FULL ===== */
+.slider{
+    position:relative;
+    width:100vw;
+    height:100vh;
+}
+
+.slide{
+    position:absolute;
+    width:100%;
+    height:100%;
+    opacity:0;
+    transition:1s;
+}
+
+.slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover; /* Đầy màn hình */
+}
+
+.slide.active{
+    opacity:1;
+}
+
+/* ===== Nút điều hướng ===== */
+.nav{
+    position:absolute;
+    bottom:40px;
+    width:100%;
+    text-align:center;
+}
+
+.nav button{
+    margin:0 15px;
+    background:white;
+    color:black;
+}
+
+/* ===== Tim bay ===== */
+.heart{
+    position:absolute;
+    animation:float 6s linear infinite;
+    pointer-events:none;
+}
+
+@keyframes float{
+    0%{transform:translateY(100vh);opacity:0}
+    50%{opacity:1}
+    100%{transform:translateY(-10vh);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Màn hình đầu -->
+<div class="card" id="mainCard">
+    <h1>❤️ Happy Valentine ❤️</h1>
+    <p>Có điều này muốn cho bạn xem...</p>
+    <br>
+    <button onclick="openLove()">Bấm vào đây 💌</button>
+</div>
+
+<!-- Trang slide -->
+<div class="love-page" id="lovePage">
+
+    <div class="slider">
+        <div class="slide active"><img src="anh1.jpg"></div>
+        <div class="slide"><img src="anh2.jpg"></div>
+        <div class="slide"><img src="anh3.jpg"></div>
+        <div class="slide"><img src="anh4.jpg"></div>
+    </div>
+
+    <div class="nav">
+        <button onclick="prevSlide()">⬅</button>
+        <button onclick="nextSlide()">➡</button>
+        <button onclick="goBack()">Quay lại</button>
+    </div>
+
+</div>
+
+<audio id="iloveyou" src="iloveyou.mp3" loop></audio>
+
+<script>
+let current=0;
+const slides=document.querySelectorAll(".slide");
+
+function showSlide(index){
+    slides.forEach(s=>s.classList.remove("active"));
+    slides[index].classList.add("active");
+}
+
+function nextSlide(){
+    current=(current+1)%slides.length;
+    showSlide(current);
+}
+
+function prevSlide(){
+    current=(current-1+slides.length)%slides.length;
+    showSlide(current);
+}
+
+/* Auto chạy 4 giây */
+setInterval(nextSlide,4000);
+
+function openLove(){
+    const card=document.getElementById("mainCard");
+    card.classList.add("hide");
+
+    setTimeout(()=>{
+        card.style.display="none";
+        document.getElementById("lovePage").classList.add("show");
+    },600);
+
+    document.getElementById("iloveyou").play();
+}
+
+function goBack(){
+    document.getElementById("lovePage").classList.remove("show");
+    const card=document.getElementById("mainCard");
+
+    setTimeout(()=>{
+        card.style.display="block";
+        card.classList.remove("hide");
+    },600);
+}
+
+/* Tim bay */
+function createHeart(){
+    const h=document.createElement("div");
+    h.innerHTML="❤️";
+    h.className="heart";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(Math.random()*25+20)+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+}
+setInterval(createHeart,300);
+</script>
+
+</body>
+</html>
